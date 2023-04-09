@@ -2,7 +2,7 @@
 # Copyright (c) 2012, 2014, 2015, 2016 Tatsuhiro Tsujikawa
 # Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors
 # Licensed under the MIT license.
-# (base: https://github.com/nghttp2/nghttp2/blob/08676d23f964ac9aa1f9317ad30f0b7d78eb5a5a/docker/Dockerfile)
+# (base: https://github.com/nghttp2/nghttp2/blob/v1.52.0/docker/Dockerfile)
 
 FROM debian:11 as build
 
