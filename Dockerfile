@@ -6,7 +6,7 @@
 
 FROM debian:11 as build
 
-ENV NGHTTP2_VERSION=v1.49.0
+ENV NGHTTP2_VERSION=1.52.0
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -15,7 +15,7 @@ RUN apt-get update && \
         zlib1g-dev libev-dev libjemalloc-dev ruby-dev libc-ares-dev bison \
         libelf-dev
 
-RUN git clone --depth 1 -b OpenSSL_1_1_1q+quic https://github.com/quictls/openssl && \
+RUN git clone --depth 1 -b OpenSSL_1_1_1t+quic https://github.com/quictls/openssl && \
     cd openssl && \
     ./config --openssldir=/etc/ssl && \
     make -j$(nproc) && \
@@ -23,7 +23,7 @@ RUN git clone --depth 1 -b OpenSSL_1_1_1q+quic https://github.com/quictls/openss
     cd .. && \
     rm -rf openssl
 
-RUN git clone --depth 1 -b v0.7.0 https://github.com/ngtcp2/nghttp3 && \
+RUN git clone --depth 1 -b v0.10.0 https://github.com/ngtcp2/nghttp3 && \
     cd nghttp3 && \
     autoreconf -i && \
     ./configure --enable-lib-only && \
@@ -32,7 +32,7 @@ RUN git clone --depth 1 -b v0.7.0 https://github.com/ngtcp2/nghttp3 && \
     cd .. && \
     rm -rf nghttp3
 
-RUN git clone --depth 1 -b v0.8.0 https://github.com/ngtcp2/ngtcp2 && \
+RUN git clone --depth 1 -b v0.14.0 https://github.com/ngtcp2/ngtcp2 && \
     cd ngtcp2 && \
     autoreconf -i && \
     ./configure --enable-lib-only \
@@ -44,18 +44,18 @@ RUN git clone --depth 1 -b v0.8.0 https://github.com/ngtcp2/ngtcp2 && \
     cd .. && \
     rm -rf ngtcp2
 
-RUN git clone --depth 1 -b v0.8.1 https://github.com/libbpf/libbpf && \
+RUN git clone --depth 1 -b v1.1.0 https://github.com/libbpf/libbpf && \
     cd libbpf && \
     PREFIX=/usr/local make -C src install && \
     cd .. && \
     rm -rf libbpf
 
-RUN git clone --depth 1 -b $NGHTTP2_VERSION https://github.com/nghttp2/nghttp2.git && \
+RUN git clone --depth 1 -b v${NGHTTP2_VERSION} https://github.com/nghttp2/nghttp2.git && \
     cd nghttp2 && \
     git submodule update --init && \
     autoreconf -i && \
     ./configure --disable-examples --disable-hpack-tools \
-        --disable-python-bindings --with-mruby --with-neverbleed \
+        --with-mruby --with-neverbleed \
         --enable-http3 --with-libbpf \
         CC=clang CXX=clang++ \
         LIBTOOL_LDFLAGS="-static-libtool-libs" \
